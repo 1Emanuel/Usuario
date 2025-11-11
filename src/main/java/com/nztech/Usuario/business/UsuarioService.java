@@ -1,9 +1,16 @@
 package com.nztech.Usuario.business;
 
 import com.nztech.Usuario.business.converter.UsuarioConverter;
+import com.nztech.Usuario.business.dtos.EnderecoDTO;
+import com.nztech.Usuario.business.dtos.TelefoneDTO;
 import com.nztech.Usuario.business.dtos.UsuarioDTO;
+import com.nztech.Usuario.infrastructure.entity.Endereco;
+import com.nztech.Usuario.infrastructure.entity.Telefone;
 import com.nztech.Usuario.infrastructure.entity.Usuario;
 import com.nztech.Usuario.infrastructure.exceptions.ConflictException;
+import com.nztech.Usuario.infrastructure.exceptions.ResourceNotFoundException;
+import com.nztech.Usuario.infrastructure.repository.EnderecoRepository;
+import com.nztech.Usuario.infrastructure.repository.TelefoneRepository;
 import com.nztech.Usuario.infrastructure.repository.UsuarioRepository;
 import com.nztech.Usuario.infrastructure.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +28,8 @@ public class UsuarioService {
     private final UsuarioConverter usuarioConverter;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final EnderecoRepository enderecoRepository;
+    private final TelefoneRepository telefoneRepository;
 
     public UsuarioDTO salvarUsuario(UsuarioDTO usuarioDTO) {
         try {
@@ -38,9 +47,16 @@ public class UsuarioService {
     }
 
     public UsuarioDTO buscarPorEmail(String email) {
-         Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(
-                 () -> new UsernameNotFoundException("email nao econtrado"));
-         return usuarioConverter.paraUsuarioDTO(usuario);
+        try {
+            return usuarioConverter.paraUsuarioDTO(
+                    usuarioRepository.findByEmail(email).orElseThrow(
+                            () -> new ResourceNotFoundException("Email nao encontrado"))
+            );
+
+        }
+        catch (ResourceNotFoundException e) {
+            throw new ResourceNotFoundException("Email nao encontrado " + email);
+        }
     }
 
     public List<UsuarioDTO> buscarTodos() {
@@ -86,6 +102,20 @@ public class UsuarioService {
         // salvar os dados do usuario convertido e depois  pegar o retorno e converter para UsuarioDTO
         return usuarioConverter.paraUsuarioDTO(usuarioRepository.save(usuario));
 
+    }
+
+    public EnderecoDTO atualizarEndereco(Long idEndereco, EnderecoDTO enderecoDTO) {
+        Endereco enderecoEntity = enderecoRepository.findById(idEndereco).orElseThrow(
+                () -> new ResourceNotFoundException("Id nao encontrado " + idEndereco));
+        Endereco endereco = usuarioConverter.updateEndereco(enderecoDTO, enderecoEntity);
+        return usuarioConverter.paraEnderecoDTO(enderecoRepository.save(endereco));
+    }
+
+    public TelefoneDTO atualizarTelefone(Long idTelefone, TelefoneDTO telefoneDTO) {
+        Telefone telefoneEntity = telefoneRepository.findById(idTelefone).orElseThrow(
+                () -> new ResourceNotFoundException("Id do Telefone nao encontrado " + idTelefone));
+        Telefone telefone = usuarioConverter.updateTelefone(telefoneDTO, telefoneEntity);
+        return usuarioConverter.paraTelefoneDTO(telefoneRepository.save(telefone));
     }
 
 

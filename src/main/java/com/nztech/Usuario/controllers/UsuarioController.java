@@ -1,6 +1,8 @@
 package com.nztech.Usuario.controllers;
 
 import com.nztech.Usuario.business.UsuarioService;
+import com.nztech.Usuario.business.dtos.EnderecoDTO;
+import com.nztech.Usuario.business.dtos.TelefoneDTO;
 import com.nztech.Usuario.business.dtos.UsuarioDTO;
 import com.nztech.Usuario.infrastructure.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -55,5 +57,17 @@ public class UsuarioController {
     public ResponseEntity<UsuarioDTO> atualizaDadosUsuari(@RequestBody UsuarioDTO usuarioDTO,
                                                           @RequestHeader("Authorization") String token) {
         return ResponseEntity.ok(usuarioService.atualizarDadosUsuario(token, usuarioDTO));
+    }
+
+    @PutMapping("/endereco")
+    public ResponseEntity<EnderecoDTO> atualizarEnderceo(@RequestBody EnderecoDTO enderecoDTO,
+                                                         @RequestParam("id") Long id) {
+        return ResponseEntity.ok(usuarioService.atualizarEndereco(id, enderecoDTO));
+    }
+
+    @PutMapping("/telefone")
+    public ResponseEntity<TelefoneDTO> atualizarTelefone(@RequestBody TelefoneDTO telefoneDTO,
+                                                         @RequestParam("id") Long id) {
+        return ResponseEntity.ok(usuarioService.atualizarTelefone(id, telefoneDTO));
     }
 }
