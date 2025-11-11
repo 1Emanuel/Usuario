@@ -1,6 +1,5 @@
 package com.nztech.Usuario.infrastructure.repository;
-
-import com.nztech.apredendo_spring.infrastructure.entity.Telefone;
+import com.nztech.Usuario.infrastructure.entity.Telefone;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

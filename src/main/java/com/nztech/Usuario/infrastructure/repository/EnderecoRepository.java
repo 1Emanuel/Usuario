@@ -1,6 +1,7 @@
 package com.nztech.Usuario.infrastructure.repository;
 
-import com.nztech.apredendo_spring.infrastructure.entity.Endereco;
+
+import com.nztech.Usuario.infrastructure.entity.Endereco;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
