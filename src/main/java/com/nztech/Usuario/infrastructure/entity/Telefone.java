@@ -16,4 +16,6 @@ public class Telefone {
     private Long id;
     private String numero;
     private String ddd;
+    @Column(name = "usuario_id")
+    private Long usuario_id;
 }
