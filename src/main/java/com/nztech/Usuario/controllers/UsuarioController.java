@@ -80,6 +80,6 @@ public class UsuarioController {
     @PostMapping("/telefone")
     public ResponseEntity<TelefoneDTO> cadastroTelefone(@RequestBody TelefoneDTO telefoneDTO,
                                                         @RequestHeader("Authorization") String token) {
-        return ResponseEntity.ok(usuarioService.cadastroEndereco(token, telefoneDTO));
+        return ResponseEntity.ok(usuarioService.cadastroTelefone(token, telefoneDTO));
     }
 }
